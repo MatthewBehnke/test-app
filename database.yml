@@ -2,9 +2,9 @@
 development:
   dialect: postgres
   database: postgres
-  user: richard
-  password: password
-  host: 10.0.131.12
+  user: user
+  password: pass
+  host: localhost
   pool: 5
 
 test:

@@ -66,8 +66,8 @@ func App() *buffalo.App {
 		app.GET("/", HomeHandler)
 
 		//AuthMiddlewares
-		app.Use(SetCurrentUser)
-		app.Use(Authorize)
+		// app.Use(SetCurrentUser)
+		// app.Use(Authorize)
 
 		//Routes for Auth
 		auth := app.Group("/auth")
@@ -83,7 +83,11 @@ func App() *buffalo.App {
 		//Routes for User registration
 		users := app.Group("/users")
 		users.POST("/", UsersCreate)
-		users.Middleware.Remove(Authorize)
+		// users.Middleware.Remove(Authorize)
+
+		app.GET("/version", func(c buffalo.Context) error {
+			return c.Render(200, r.String("Version 2"))
+		})
 
 		app.ServeFiles("/", http.FS(public.FS())) // serve files from the public directory
 	}
