@@ -47,7 +47,7 @@ func App() *buffalo.App {
 		})
 
 		// Automatically redirect to SSL
-		app.Use(forceSSL())
+		// app.Use(forceSSL())
 
 		// Log request parameters (filters apply).
 		app.Use(paramlogger.ParameterLogger)
@@ -64,6 +64,26 @@ func App() *buffalo.App {
 		app.Use(translations())
 
 		app.GET("/", HomeHandler)
+
+		//AuthMiddlewares
+		app.Use(SetCurrentUser)
+		app.Use(Authorize)
+
+		//Routes for Auth
+		auth := app.Group("/auth")
+		auth.GET("/", AuthLanding)
+		auth.GET("/signin", AuthNew)
+		auth.GET("/register", UsersNew)
+		auth.POST("/", AuthCreate)
+		auth.GET("/signout", AuthDestroy)
+		auth.DELETE("/", AuthDestroy)
+		auth.Middleware.Remove(Authorize)
+		auth.Middleware.Skip(Authorize, AuthLanding, AuthNew, AuthCreate)
+
+		//Routes for User registration
+		users := app.Group("/users")
+		users.POST("/", UsersCreate)
+		users.Middleware.Remove(Authorize)
 
 		app.ServeFiles("/", http.FS(public.FS())) // serve files from the public directory
 	}

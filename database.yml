@@ -1,14 +1,14 @@
 ---
 development:
   dialect: postgres
-  database: bank3_development
-  user: postgres
-  password: postgres
-  host: 127.0.0.1
+  database: postgres
+  user: richard
+  password: password
+  host: 10.0.131.12
   pool: 5
 
 test:
-  url: {{envOr "TEST_DATABASE_URL" "postgres://postgres:postgres@127.0.0.1:5432/bank3_test?sslmode=disable"}}
+  url: {{envOr "TEST_DATABASE_URL" "postgres://richard:password@10.0.131.12:5432/app?sslmode=disable"}}
 
 production:
-  url: {{envOr "DATABASE_URL" "postgres://postgres:postgres@127.0.0.1:5432/bank3_production?sslmode=disable"}}
+  url: {{envOr "DATABASE_URL" "postgres://richard:password@10.0.131.12:5432/app?sslmode=disable"}}
