@@ -10,7 +10,6 @@ import (
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/buffalo-pop/v3/pop/popmw"
 	"github.com/gobuffalo/envy"
-	csrf "github.com/gobuffalo/mw-csrf"
 	forcessl "github.com/gobuffalo/mw-forcessl"
 	i18n "github.com/gobuffalo/mw-i18n/v2"
 	paramlogger "github.com/gobuffalo/mw-paramlogger"
@@ -54,7 +53,7 @@ func App() *buffalo.App {
 
 		// Protect against CSRF attacks. https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
 		// Remove to disable this.
-		app.Use(csrf.New)
+		// app.Use(csrf.New)
 
 		// Wraps each request in a transaction.
 		//   c.Value("tx").(*pop.Connection)
@@ -114,7 +113,7 @@ func translations() buffalo.MiddlewareFunc {
 // for more information: https://github.com/unrolled/secure/
 func forceSSL() buffalo.MiddlewareFunc {
 	return forcessl.Middleware(secure.Options{
-		SSLRedirect:     ENV == "production",
-		SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
+		SSLRedirect: false,
+		// SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
 	})
 }
